@@ -1,0 +1,73 @@
+version: "3"
+
+networks:
+  sparql:
+    driver: bridge
+services:
+  blazegraph:
+    image: blazegraph:2.1.5
+    ports:
+      - "8889:8080"
+    volumes:
+      - "$PWD/config/RWStore.properties:/RWStore.properties"
+      - "$PWD/data/:/data"
+    networks:
+      - sparql
+  trifid:
+    image: zazuko/trifid
+    ports:
+      - "8890:8080"
+    depends_on:
+      - blazegraph
+    volumes:
+      - "$PWD/config/config-trifid.json:/app/config-blazegraph.json"
+    environment:
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
+      - DEBUG=trifid:*
+      - TRIFID_CONFIG=/config-blazegraph.json
+      - SPARQL_ENDPOINT_URL=http://blazegraph:8080/bigdata/namespace/kb/sparql
+      - DATASET_BASE_URL=https://data.meemoo.be/source/"
+    networks:
+      - sparql
+  hypergraphql:
+    build: ./hypergraphql
+    image: hypergraphql
+      #   volumes:
+  #     - "$PWD/config/openphacts.yaml:/ops-search.yaml"
+    networks:
+      - sparql
+  # grappa:
+  #   build: ./grappa
+  #   image: grappa
+  #   networks:
+  #     - sparql
+  # elasticsearch:
+  #   image: openphacts/ops-search-elasticsearch
+  #   depends_on:
+  #     - blazegraph
+  #   ports:
+  #     - "9200:9200"
+  #   networks:
+  #     - sparql
+  # ops-search:
+  #   build: https://github.com/openphacts/ops-search.git
+  #   image: ops-search
+  #   command: /usr/local/python/bin/python src/load.py /ops-search.yaml
+  #   volumes:
+  #     - "$PWD/config/openphacts.yaml:/ops-search.yaml"
+  #   networks:
+  #     - sparql
+#   solr:
+#     image: solr:8
+#     ports:
+#      - "8983:8983"
+#     volumes:
+#       - $PWD/data:/var/solr
+#       - "$PWD/config/solr-setup.sh:/solr-setup.sh"
+#     command:
+#  #     - sh solr-setup.sh
+#       - solr-precreate
+#       - gettingstarted
+#     networks:
+#       - sparql
+      
