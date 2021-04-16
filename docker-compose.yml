@@ -7,67 +7,54 @@ services:
   blazegraph:
     image: blazegraph:2.1.5
     ports:
-      - "8889:8080"
+      - "8090:8080"
     volumes:
       - "$PWD/config/RWStore.properties:/RWStore.properties"
       - "$PWD/data/:/data"
     networks:
       - sparql
+  rdf4j:
+    image: eclipse/rdf4j-workbench:amd64-latest
+    ports:
+      - "8091:8080"
+    # environment: 
+    #   - JAVA_OPTS="-Xms1g -Xmx4g"
+    volumes:
+      - "$PWD/data/rdf4j:/var/rdf4j"
+      - "$PWD/data/rdf4j/logs:/usr/local/tomcat/logs"
+    networks:
+      - sparql
+  vocbench3:
+    build: ./vocbench3
+    image: vocbench
+    ports:
+    - "8092:1979"
+    volumes:
+    - "$PWD/data/stdata:/opt/vocbench3/data"
+    networks:
+      - sparql
   trifid:
     image: zazuko/trifid
     ports:
-      - "8890:8080"
+      - "8093:8080"
     depends_on:
       - blazegraph
     volumes:
-      - "$PWD/config/config-trifid.json:/app/config-blazegraph.json"
+      - "$PWD/config/config-trifid.json:/app/config-trifid.json"
     environment:
-      - NODE_TLS_REJECT_UNAUTHORIZED=0
+  #    - NODE_TLS_REJECT_UNAUTHORIZED=0
       - DEBUG=trifid:*
-      - TRIFID_CONFIG=/config-blazegraph.json
-      - SPARQL_ENDPOINT_URL=http://blazegraph:8080/bigdata/namespace/kb/sparql
-      - DATASET_BASE_URL=https://data.meemoo.be/source/"
+      - TRIFID_CONFIG=/config-trifid.json
+      - SPARQL_ENDPOINT_URL=http://blazegraph:8080/bigdata/namespace/organizations/sparql
+      - DATASET_BASE_URL=https://data.meemoo.be/
     networks:
       - sparql
   hypergraphql:
     build: ./hypergraphql
     image: hypergraphql
-      #   volumes:
-  #     - "$PWD/config/openphacts.yaml:/ops-search.yaml"
+    ports:
+      - "8094:8081"
     networks:
       - sparql
-  # grappa:
-  #   build: ./grappa
-  #   image: grappa
-  #   networks:
-  #     - sparql
-  # elasticsearch:
-  #   image: openphacts/ops-search-elasticsearch
-  #   depends_on:
-  #     - blazegraph
-  #   ports:
-  #     - "9200:9200"
-  #   networks:
-  #     - sparql
-  # ops-search:
-  #   build: https://github.com/openphacts/ops-search.git
-  #   image: ops-search
-  #   command: /usr/local/python/bin/python src/load.py /ops-search.yaml
-  #   volumes:
-  #     - "$PWD/config/openphacts.yaml:/ops-search.yaml"
-  #   networks:
-  #     - sparql
-#   solr:
-#     image: solr:8
-#     ports:
-#      - "8983:8983"
-#     volumes:
-#       - $PWD/data:/var/solr
-#       - "$PWD/config/solr-setup.sh:/solr-setup.sh"
-#     command:
-#  #     - sh solr-setup.sh
-#       - solr-precreate
-#       - gettingstarted
-#     networks:
-#       - sparql
+
       
