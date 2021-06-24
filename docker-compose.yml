@@ -34,7 +34,8 @@ services:
     networks:
       - sparql
   trifid:
-    image: zazuko/trifid
+    build: ./trifid
+    image: trifid
     ports:
       - "8093:8080"
     depends_on:
