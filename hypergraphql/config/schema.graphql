@@ -1,20 +1,25 @@
 type __Context {
-    City:           _@href(iri: "http://dbpedia.org/ontology/City")
-    Country:        _@href(iri: "http://dbpedia.org/ontology/Country")
-    label:          _@href(iri: "http://www.w3.org/2000/01/rdf-schema#label")
-    comment:        _@href(iri: "http://www.w3.org/2000/01/rdf-schema#comment")
-    country:        _@href(iri: "http://dbpedia.org/ontology/country")
-    capital:        _@href(iri: "http://dbpedia.org/ontology/capital")
+    Organization:           _@href(iri: "http://www.w3.org/ns/org#Organization")
+    Person:                 _@href(iri: "https://schema.org/Person")
+    Document:               _@href(iri: "http://xmlns.com/foaf/0.1/Document")
+    label:                  _@href(iri: "http://www.w3.org/2004/02/skos/core#prefLabel")
+    altLabel:               _@href(iri: "http://www.w3.org/2004/02/skos/core#altLabel")
+    homepage:               _@href(iri: "http://xmlns.com/foaf/0.1/homepage")
+    accountManager:         _@href(iri: "https://meemoo.be/ns/org#hasAccountManager")
+    givenName:              _@href(iri: "https://schema.org/givenName")
+    familyName:             _@href(iri: "https://schema.org/familyName")
+    email:                  _@href(iri: "https://schema.org/email")
 }
 
-type City @service(id:"dbpedia-sparql") {
-    label: [String] @service(id:"dbpedia-sparql")
-    country: Country @service(id:"dbpedia-sparql")
-    comment: [String] @service(id:"dbpedia-sparql")
+type Organization @service(id:"blazegraph-sparql") {
+    label: String @service(id:"blazegraph-sparql")
+    altLabel: String @service(id:"blazegraph-sparql")
+    homepage: String @service(id:"blazegraph-sparql")
+    accountManager: Person @service(id:"blazegraph-sparql")
 }
 
-type Country @service(id:"dbpedia-sparql") {
-    label: [String] @service(id:"dbpedia-sparql")
-    capital: City @service(id:"dbpedia-sparql")
-    comment: [String] @service(id:"dbpedia-sparql")
+type Person @service(id:"blazegraph-sparql") {
+    givenName: String @service(id:"blazegraph-sparql")
+    familyName: String @service(id:"blazegraph-sparql")
+    email: String @service(id:"blazegraph-sparql")
 }

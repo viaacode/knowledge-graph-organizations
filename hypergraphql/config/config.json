@@ -8,10 +8,10 @@
     },
     "services": [
         {
-            "id": "dbpedia-sparql",
+            "id": "meemoo-sparql",
             "type": "SPARQLEndpointService",
-            "url": "http://dbpedia.org/sparql/",
-            "graph": "http://dbpedia.org",
+            "url": "http://blazegraph:8080/bigdata/namespace/kb/sparql",
+            "graph": "http://data.meemoo.be/graphs/organizations",
             "user": "",
             "password": ""
         }
