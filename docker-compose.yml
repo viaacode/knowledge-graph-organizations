@@ -9,7 +9,7 @@ services:
     ports:
       - "8090:8080"
     volumes:
-      - "$PWD/config/RWStore.properties:/RWStore.properties"
+      - "$PWD/blazegraph/RWStore.properties:/RWStore.properties"
       - "$PWD/data/:/data"
     networks:
       - sparql
@@ -41,7 +41,7 @@ services:
     depends_on:
       - blazegraph
     volumes:
-      - "$PWD/config/config-trifid.json:/app/config-trifid.json"
+      - "$PWD/trifid/config-trifid.json:/app/config-trifid.json"
     environment:
   #    - NODE_TLS_REJECT_UNAUTHORIZED=0
       - DEBUG=trifid:*
