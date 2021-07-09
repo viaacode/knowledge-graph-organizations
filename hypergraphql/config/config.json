@@ -1,5 +1,5 @@
 {
-    "name": "dbpedia-hgql",
+    "name": "meemoo-hgql",
     "schema": "schema.graphql",
     "server": {
         "port": 8081,

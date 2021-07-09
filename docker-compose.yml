@@ -57,5 +57,11 @@ services:
       - "8094:8081"
     networks:
       - sparql
-
+  # hypergraphql:
+  #   build: ./spex
+  #   image: spex
+  #   ports:
+  #     - "8095:5000"
+  #   networks:
+  #     - sparql
       

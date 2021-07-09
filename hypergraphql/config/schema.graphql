@@ -1,7 +1,12 @@
 type __Context {
     Organization:           _@href(iri: "http://www.w3.org/ns/org#Organization")
+    OrganizationalUnit:     _@href(iri: "http://www.w3.org/ns/org#OrganizationalUnit")
     Person:                 _@href(iri: "https://schema.org/Person")
-    Document:               _@href(iri: "http://xmlns.com/foaf/0.1/Document")
+    Site:                   _@href(iri: "http://www.w3.org/ns/org#Site")
+    Post:                   _@href(iri: "http://www.w3.org/ns/org#Post")
+    Concept:                _@href(iri: "http://www.w3.org/2004/02/skos/core#Concept")
+    ContactPoint:           _@href(iri: "http://www.w3.org/ns/org#ContactPoint")
+
     label:                  _@href(iri: "http://www.w3.org/2004/02/skos/core#prefLabel")
     altLabel:               _@href(iri: "http://www.w3.org/2004/02/skos/core#altLabel")
     homepage:               _@href(iri: "http://xmlns.com/foaf/0.1/homepage")
@@ -9,17 +14,91 @@ type __Context {
     givenName:              _@href(iri: "https://schema.org/givenName")
     familyName:             _@href(iri: "https://schema.org/familyName")
     email:                  _@href(iri: "https://schema.org/email")
+    logo:                   _@href(iri: "https://schema.org/logo")
+    description:            _@href(iri: "http://purl.org/dc/elements/1.1/description")
+    contactType:            _@href(iri: "https://schema.org/contactType")
+    address:                _@href(iri: "http://www.w3.org/ns/org#siteAddress")
+    telephone:              _@href(iri: "https://schema.org/telephone")
+    classification:         _@href(iri: "http://www.w3.org/ns/org#classification")
+    units:                  _@href(iri: "http://www.w3.org/ns/org#hasUnit")
+    unitOf:                 _@href(iri: "http://www.w3.org/ns/org#unitOf")
+    contactPoint:           _@href(iri: "http://www.w3.org/ns/org#contactPoint")
+    holds:                  _@href(iri: "http://www.w3.org/ns/org#holds")
+    primarySite:            _@href(iri: "http://www.w3.org/ns/org#hasPrimarySite")
+    sites:                  _@href(iri: "http://www.w3.org/ns/org#hasSite")
+    posts:                  _@href(iri: "http://www.w3.org/ns/org#hasPost")
+    postIn:                 _@href(iri: "http://www.w3.org/ns/org#postIn")
+    role:                   _@href(iri: "http://www.w3.org/ns/org#role")
+    accountManagerOf:       _@href(iri: "https://meemoo.be/ns/org#isAccountManagerOf")
 }
 
-type Organization @service(id:"blazegraph-sparql") {
-    label: String @service(id:"blazegraph-sparql")
-    altLabel: String @service(id:"blazegraph-sparql")
-    homepage: String @service(id:"blazegraph-sparql")
-    accountManager: Person @service(id:"blazegraph-sparql")
+type Organization @service(id:"meemoo-sparql") {
+    label: String! @service(id:"meemoo-sparql")
+    altLabel: String @service(id:"meemoo-sparql")
+    homepage: String @service(id:"meemoo-sparql")
+    accountManager: Person @service(id:"meemoo-sparql")
+    logo: String @service(id:"meemoo-sparql")
+    description: String @service(id:"meemoo-sparql")
+    classification: Concept @service(id:"meemoo-sparql")
+    units: [OrganizationalUnit] @service(id:"meemoo-sparql")
+    contactPoint: [ContactPoint] @service(id:"meemoo-sparql")
+    primarySite: Site @service(id:"meemoo-sparql")
+    sites: [Site] @service(id:"meemoo-sparql")
+    posts: [Post] @service(id:"meemoo-sparql")
 }
 
-type Person @service(id:"blazegraph-sparql") {
-    givenName: String @service(id:"blazegraph-sparql")
-    familyName: String @service(id:"blazegraph-sparql")
-    email: String @service(id:"blazegraph-sparql")
+
+type OrganizationalUnit @service(id:"meemoo-sparql") {
+    label: String! @service(id:"meemoo-sparql")
+    altLabel: String @service(id:"meemoo-sparql")
+    homepage: String @service(id:"meemoo-sparql")
+    accountManager: Person @service(id:"meemoo-sparql")
+    logo: String @service(id:"meemoo-sparql")
+    description: String @service(id:"meemoo-sparql")
+    classification: Concept @service(id:"meemoo-sparql")
+    units: [OrganizationalUnit] @service(id:"meemoo-sparql")
+    contactPoint: [ContactPoint] @service(id:"meemoo-sparql")
+    primarySite: Site @service(id:"meemoo-sparql")
+    sites: [Site] @service(id:"meemoo-sparql")
+    posts: [Post] @service(id:"meemoo-sparql")
+    unitOf: Organization! @service(id:"meemoo-sparql")
+}
+
+type Post @service(id:"meemoo-sparql") {
+  role: Concept @service(id:"meemoo-sparql")
+  postIn: [Organization]! @service(id:"meemoo-sparql")
+}
+
+type Person @service(id:"meemoo-sparql") {
+  givenName: String @service(id:"meemoo-sparql") 
+  familyName: String @service(id:"meemoo-sparql")
+  email: String @service(id:"meemoo-sparql")
+  holds: [Post] @service(id:"meemoo-sparql")
+  accountManagerOf: [Organization] @service(id:"meemoo-sparql")
+}
+
+type Site @service(id:"meemoo-sparql") {
+  address: PostalAddress @service(id:"meemoo-sparql")
+}
+
+type ContactPoint @service(id:"meemoo-sparql") {
+  contactType: String! @service(id:"meemoo-sparql")
+  email: String @service(id:"meemoo-sparql")
+  telephone: String @service(id:"meemoo-sparql")
+}
+
+type PostalAddress @service(id:"meemoo-sparql") {
+  contactType: String! @service(id:"meemoo-sparql")
+  email: String @service(id:"meemoo-sparql")
+  telephone: String @service(id:"meemoo-sparql")
+  addressCountry: String @service(id:"meemoo-sparql")
+  addressLocality: String @service(id:"meemoo-sparql")
+  addressRegion: String @service(id:"meemoo-sparql")
+  postOfficeBoxNumber: String @service(id:"meemoo-sparql")
+  postalCode: String @service(id:"meemoo-sparql")
+  streetAddress: String @service(id:"meemoo-sparql")
+}
+
+type Concept @service(id:"meemoo-sparql") {
+    label: String @service(id:"meemoo-sparql")
 }
